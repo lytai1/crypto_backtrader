@@ -27,7 +27,7 @@ binance_client = Client(api_key=config.binance_api_key, api_secret=config.binanc
 ### FUNCTIONS
 def minutes_of_new_data(symbol, kline_size, data, source):
     if len(data) > 0:  old = parser.parse(data["timestamp"].iloc[-1])
-    elif source == "binance": old = datetime.strptime('1 Jan 2017', '%d %b %Y')
+    elif source == "binance": old = datetime.strptime('1 Jan 2020', '%d %b %Y')
     elif source == "bitmex": old = bitmex_client.Trade.Trade_getBucketed(symbol=symbol, binSize=kline_size, count=1, reverse=False).result()[0][0]['timestamp']
     if source == "binance": new = pd.to_datetime(binance_client.get_klines(symbol=symbol, interval=kline_size)[-1][0], unit='ms')
     if source == "bitmex": new = bitmex_client.Trade.Trade_getBucketed(symbol=symbol, binSize=kline_size, count=1, reverse=True).result()[0][0]['timestamp']
@@ -60,7 +60,7 @@ def get_all_binance(symbol, kline_size, save=True, update=True):
     if not data_df.empty:
         oldest_point = data_df.index[-1].to_pydatetime()
     else:
-        oldest_point = datetime.strptime('1 Jan 2017', '%d %b %Y')
+        oldest_point = datetime.strptime('1 Jan 2020', '%d %b %Y')
     newest_point = datetime.now()
     print(oldest_point, newest_point)
     
@@ -68,7 +68,7 @@ def get_all_binance(symbol, kline_size, save=True, update=True):
     available_data = math.ceil(delta_min/binsizes[kline_size])
     
     # print some info
-    if oldest_point == datetime.strptime('1 Jan 2017', '%d %b %Y'): print('Downloading all available %s data for %s. Be patient..!' % (kline_size, symbol))
+    if oldest_point == datetime.strptime('1 Jan 2020', '%d %b %Y'): print('Downloading all available %s data for %s. Be patient..!' % (kline_size, symbol))
     else: print('Downloading %d minutes of new data available for %s, i.e. %d instances of %s data.' % (delta_min, symbol, available_data, kline_size))
         
     # download kbars
